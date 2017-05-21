@@ -3,6 +3,9 @@
 # slightly different but should still be ok
 import json
 import time
+import nltk.tokenize
+from nltk.sentiment.vader import SentimentIntensityanalyzer as SIA
+
 
 import nltk
 
@@ -30,6 +33,24 @@ def body_list(data):
         comments.append(d['body'])
 
     return comments
+
+
+def sent_analysis(comment):
+    '''
+    runs a sentiment analysis on a comment by sentence and returns sent_score
+    of average sentiment score of sentences
+    '''
+    sent_list = nltk.sent_tokenize(comment)
+    sentiment = SIA()
+    scores_list = []
+
+    for sent in sent_list:
+        score = sentiment.polarity_scores(sent)
+        scores_list.append(score)
+
+    sent_score = sum(scores_list)/len(scores_list)
+
+    return sent_score
 
 
 if __name__=='__main__':
