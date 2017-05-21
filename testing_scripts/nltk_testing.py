@@ -4,6 +4,8 @@
 import json
 import time
 
+import nltk
+
 def init_data():
     '''
     reads each line of the file
