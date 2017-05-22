@@ -5,9 +5,34 @@ import json
 import time
 import nltk.tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
-
-
 import nltk
+
+
+DATES = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05',
+            'Jun': '06', 'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10',
+            'Nov': '11', 'Dec': '12'}
+
+
+def clean_line(raw_line):
+    '''
+    cleans raw line from data set
+    '''
+    json_v = json.loads(raw_line)
+    epoch = json_v['created_utc']
+    json_v['time'] = time.strftime("%a %d %b %Y %H:%M:%S", time.localtime(epoch))
+    # day of the week, day, month, year, time
+    day = json_v['time'][4:6]
+    month = json_v['time'][7:10]
+    n_mnth = DATES[month]
+    json_v['suffix'] = n_mnth + day
+    comment = json_v['body']
+    comment = comment.replace('\n', '')
+    comment = comment.replace('\r', '')
+    json_v['body'] = comment
+
+    return json_v
+
+
 
 def init_data():
     '''
@@ -16,10 +41,7 @@ def init_data():
     raw_data = open('2005/RC_2005-12')
     data_lst = []
     for line in raw_data:
-        json_v = json.loads(line)
-        epoch = json_v['created_utc']
-        json_v['time'] = time.strftime("%a %d %b %Y %H:%M:%S", time.localtime(epoch))
-        # day of the week, day, month, year, time
+        json_v = clean_line(line)
         data_lst.append(json_v)
 
     return data_lst
@@ -30,7 +52,8 @@ def body_list(data):
     '''
     comments = []
     for d in data:
-        comments.append(d['body'])
+        comment = d['body']
+        comments.append(comment)
 
     return comments
 
