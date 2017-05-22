@@ -4,7 +4,7 @@
 import json
 import time
 import nltk.tokenize
-from nltk.sentiment.vader import SentimentIntensityanalyzer as SIA
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
 
 
 import nltk
