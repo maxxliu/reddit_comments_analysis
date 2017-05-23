@@ -3,6 +3,7 @@
 # slightly different but should still be ok
 import json
 import time
+import datetime
 import nltk.tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
 import nltk
@@ -23,12 +24,15 @@ def clean_line(raw_line):
     # day of the week, day, month, year, time
     day = json_v['time'][4:6]
     month = json_v['time'][7:10]
+    year = json_v['time'][11:15]
     n_mnth = DATES[month]
-    json_v['suffix'] = n_mnth + day
+    week_num = datetime.date(int(year), int(n_mnth), int(day)).isocalendar()[1]
+    json_v['week'] = week_num
+    json_v['month'] = n_mnth
     comment = json_v['body']
     comment = comment.replace('\n', '')
     comment = comment.replace('\r', '')
-    json_v['body'] = comment
+    json_v['body'] = comment.lower()
 
     return json_v
 

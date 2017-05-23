@@ -6,17 +6,20 @@ import time
 import nltk_testing
 
 KEYWORDS = []
+YEAR = '2016'
 
 class DailySentiment(MRJob):
     def mapper(self, _, line):
         json_v = nltk_testing.clean_line(line)
 
         for word in KEYWORDS:
-            if word in json_v['body']:
+            if word in json_v['body'] and json_v['year'] is YEAR:
                 # do the sentiment analysis
                 # should return sentiment and word count
-                key = word + json_v['suffix']
-                yield key, values # (sentiment, word_count)
+                key_1 = word + json_v['month'] # aggregate month data
+                key_2 = word + json_v['week'] # aggregate weekly data
+                yield key_1, values # (sentiment, word_count)
+                yield key_2, vlaues
 
 
     def combiner(self, key, values):
