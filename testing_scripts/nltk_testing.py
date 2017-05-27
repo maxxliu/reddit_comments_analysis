@@ -67,16 +67,16 @@ def sent_analysis(comment):
     runs a sentiment analysis on a comment by sentence and returns sent_score
     of average sentiment score of sentences
     '''
+    sent_score = 0
     sent_list = nltk.sent_tokenize(comment)
     sentiment = SIA()
     scores_list = []
-
-    for sent in sent_list:
-        score = sentiment.polarity_scores(sent)
-        scores_list.append(score)
-
-    sent_score = sum(scores_list)/len(scores_list)
-
+    if len(sent_list) > 0:
+        for sent in sent_list:
+            score_dict = sentiment.polarity_scores(sent)
+            score = score_dict['compound']
+            scores_list.append(score)
+        sent_score = sum(scores_list)/len(scores_list)
     return sent_score
 
 
