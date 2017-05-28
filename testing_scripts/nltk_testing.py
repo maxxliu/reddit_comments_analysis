@@ -4,10 +4,6 @@
 import json
 import time
 import datetime
-import nltk.tokenize
-from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
-import nltk
-
 
 DATES = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05',
             'Jun': '06', 'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10',
@@ -37,7 +33,6 @@ def clean_line(raw_line):
     return json_v
 
 
-
 def init_data():
     '''
     reads each line of the file
@@ -50,6 +45,7 @@ def init_data():
 
     return data_lst
 
+
 def body_list(data):
     '''
     just creates a list of the actual comments so we can play with nltk
@@ -60,24 +56,6 @@ def body_list(data):
         comments.append(comment)
 
     return comments
-
-
-def sent_analysis(comment):
-    '''
-    runs a sentiment analysis on a comment by sentence and returns sent_score
-    of average sentiment score of sentences
-    '''
-    sent_score = 0
-    sent_list = nltk.sent_tokenize(comment)
-    sentiment = SIA()
-    scores_list = []
-    if len(sent_list) > 0:
-        for sent in sent_list:
-            score_dict = sentiment.polarity_scores(sent)
-            score = score_dict['compound']
-            scores_list.append(score)
-        sent_score = sum(scores_list)/len(scores_list)
-    return sent_score
 
 
 if __name__=='__main__':
