@@ -1,48 +1,54 @@
 from mrjob.job import MRJob
 import re
 import json
+import nltk_testing
 
-class guest_staff(MRJob):
+class sent_count(MRJob):
     '''
-    yields a list of people who were both
-    visitors and staffers of the white house.
+    yields 3 lists of commenters: 
+    1. Commenters with highest upvote counts
+    2. Commenters that are the meanest
+    3. Commenters that are the nicest
     '''
-
-
-        up = a['ups']
 
 
     def mapper(self, _, line):
-        json = json.loads(line)
-        up = json['ups']
-        author = json['author']
-        body = json['body']
+        j = json.loads(line)
+        up = j['ups']
+        author = j['author']
+        body = j['body']
         body = body.replace("\r\n", " ")
         body = body.replace("\n", " ")
         body = body.replace("\r", " ")
-        sentiment = body #do some sentiment analysis right here
-        yield author, (up, sentiment)   
+        sentiment = nltk_testing.sent_analysis(body) #do some sentiment analysis right here
+        yield author, (up, sentiment, 1)   
 
     def combiner(self, author, type_tuple):
         up = 0
         sentiment = 0
+        author_count = 0
         for tup in type_tuple:
             up += tup[0]
             sentiment += tup[1]
-        yield author, (up, sentiment)
+            author_count += tup[2]
+        yield author, (up, sentiment, author_count)
 
     def reducer_init(self):
         self.up_values = [0] * 10
         self.up_people = [None] * 10
-        self.sent_values = [0] * 10
-        self.sent_people = [None] * 10
+        self.gsent_values = [0] * 10
+        self.gsent_people = [None] * 10
+        self.bsent_values = [0] * 10
+        self.bsent_people = [None] * 10
 
-    def reducer(self, author, type_person):
+    def reducer(self, author, type_tuple):
         up = 0
         sentiment = 0
+        author_count = 0
         for tup in type_tuple:
             up += tup[0]
             sentiment += tup[1]
+            author_count += tup[2]
         u = 9
         s = 9
         while up > self.up_values[u] and u > -1:
@@ -51,11 +57,17 @@ class guest_staff(MRJob):
             self.up_values.insert((u + 1), up)
             self.up_people.insert((u + 1), author)
 
-        while sentiment > self.sent_values[s] and s > -1:
+        while sentiment < self.bsent_values[s] and s > -1:
             s = s - 1
         if s != 9:
-            self.sent_values.insert((s + 1), sentiment)
-            self.sent_people.insert((s + 1), author)
+            self.bsent_values.insert((s + 1), sentiment)
+            self.bsent_people.insert((s + 1), author)
+
+        while sentiment > self.gsent_values[s] and s > -1:
+            s = s - 1
+        if s != 9:
+            self.gsent_values.insert((s + 1), sentiment)
+            self.gsent_people.insert((s + 1), author)
 
     def reducer_final(self):
         yield self.up_people[0], self.up_values[0]
@@ -69,18 +81,29 @@ class guest_staff(MRJob):
         yield self.up_people[8], self.up_values[8]
         yield self.up_people[9], self.up_values[9]
 
-        yield self.sent_people[0], self.sent_values[0]
-        yield self.sent_people[1], self.sent_values[1]
-        yield self.sent_people[2], self.sent_values[2]
-        yield self.sent_people[3], self.sent_values[3]
-        yield self.sent_people[4], self.sent_values[4]
-        yield self.sent_people[5], self.sent_values[5]
-        yield self.sent_people[6], self.sent_values[6]
-        yield self.sent_people[7], self.sent_values[7]
-        yield self.sent_people[8], self.sent_values[8]
-        yield self.sent_people[9], self.sent_values[9]
+        yield self.gsent_people[0], self.gsent_values[0]
+        yield self.gsent_people[1], self.gsent_values[1]
+        yield self.gsent_people[2], self.gsent_values[2]
+        yield self.gsent_people[3], self.gsent_values[3]
+        yield self.gsent_people[4], self.gsent_values[4]
+        yield self.gsent_people[5], self.gsent_values[5]
+        yield self.gsent_people[6], self.gsent_values[6]
+        yield self.gsent_people[7], self.gsent_values[7]
+        yield self.gsent_people[8], self.gsent_values[8]
+        yield self.gsent_people[9], self.gsent_values[9]
+
+        yield self.bsent_people[0], self.bsent_values[0]
+        yield self.bsent_people[1], self.bsent_values[1]
+        yield self.bsent_people[2], self.bsent_values[2]
+        yield self.bsent_people[3], self.bsent_values[3]
+        yield self.bsent_people[4], self.bsent_values[4]
+        yield self.bsent_people[5], self.bsent_values[5]
+        yield self.bsent_people[6], self.bsent_values[6]
+        yield self.bsent_people[7], self.bsent_values[7]
+        yield self.bsent_people[8], self.bsent_values[8]
+        yield self.bsent_people[9], self.bsent_values[9]
 
 
 
 if __name__ == '__main__':
-    guest_staff.run()
+    sent_count.run()
