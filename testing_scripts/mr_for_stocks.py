@@ -16,8 +16,8 @@ class DailySentiment(MRJob):
             if word in json_v['body'] and json_v['year'] is YEAR:
                 # do the sentiment analysis
                 # should return sentiment and word count
-                key_1 = word + json_v['month'] # aggregate month data
-                key_2 = word + json_v['week'] # aggregate weekly data
+                key_1 = word + json_v['month'] + 'm' # aggregate month data
+                key_2 = word + json_v['week'] + 'w' # aggregate weekly data
                 yield key_1, values # (sentiment, word_count)
                 yield key_2, vlaues
 
