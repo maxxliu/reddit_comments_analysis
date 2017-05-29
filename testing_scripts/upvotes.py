@@ -1,7 +1,7 @@
 from mrjob.job import MRJob
 import re
 import json
-import nltk_testing
+import tb_sentiment
 
 class sent_count(MRJob):
     '''
@@ -20,7 +20,7 @@ class sent_count(MRJob):
         body = body.replace("\r\n", " ")
         body = body.replace("\n", " ")
         body = body.replace("\r", " ")
-        sentiment = nltk_testing.sent_analysis(body) #do some sentiment analysis right here
+        sentiment = tb_sentiment.dumb_analysis(body) #do some sentiment analysis right here
         yield author, (up, sentiment, 1)   
 
     def combiner(self, author, type_tuple):

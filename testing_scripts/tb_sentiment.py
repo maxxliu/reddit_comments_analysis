@@ -1,6 +1,7 @@
 import nltk.tokenize
 from textblob import TextBlob
 
+
 def comment_analysis(key_word, comment):
     '''
     '''
@@ -17,6 +18,19 @@ def comment_analysis(key_word, comment):
     comment_analysis['score'] = sum(scores) / len(scores)
 
     return comment_analysis
+
+
+def dumb_analysis(comment):
+    '''
+    '''
+    sent_list = nltk.sent_tokenize(comment)
+    scores = []
+
+    for sent in sent_list:
+        analysis = TextBlob(sent)
+        scores.append(analysis.sentiment.polarity)
+
+    return sum(scores) / len(scores)
 
 
 def word_in(key_word, sent):
