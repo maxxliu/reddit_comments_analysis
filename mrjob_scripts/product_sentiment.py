@@ -53,9 +53,8 @@ class ProductSentiment(MRJob):
         for value in values:
             final_count += value[0]
             final_sentiment += value[1]
-        average_sentiment = final_sentiment / final_count
 
-        yield key, (average_sentiment, final_count, final_sentiment)
+        yield key, (final_count, final_sentiment)
 
 
 if __name__=='__main__':
