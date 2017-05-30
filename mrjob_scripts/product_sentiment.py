@@ -3,8 +3,7 @@ import json
 import helper
 import nltk.tokenize
 
-PRODUCTS = ['Charlie', 'David', 'testing', 'business', 'school', 'plus', 'hello'
-'why', 'weird', 'working', 'faster', 'microsoft', 'more', 'words']
+PRODUCTS = []
 
 def test():
     PRODUCTS.append('computer')
@@ -16,8 +15,6 @@ def test():
     PRODUCTS.append('school')
     PRODUCTS.append('study')
     PRODUCTS.append('Apple')
-    useless = ['notgonnamatch'] * 100
-    PRODUCTS.extend(useless)
 
 
 class ProductSentiment(MRJob):
