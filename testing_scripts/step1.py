@@ -3,7 +3,16 @@ import re
 import json
 import tb_sentiment
 
-one_thousand_comp_lst = ['Apple', 'Google', 'Ford', 'Pirates']
+
+COMP_LIST = []
+
+def load_lst():
+    csv = open('companylist.csv')
+    for i in csv:
+        i = i.strip('\n')
+        COMP_LIST.append(i)
+    COMP_LIST.pop(0)
+
 class t_companies_baskets(MRJob):
     '''
     yields 3 lists of commenters: 
@@ -15,7 +24,9 @@ class t_companies_baskets(MRJob):
     def mapper(self, _, line):
         j = json.loads(line)
         comment = j['body']
-        for company in one_thousand_comp_lst:
+        words = set([x.strip(",.'!?/:;-_#$[]()%*") for x in comment.split(' ')])
+        to_use = [x for x in words if x not in helper.STOPWORDS]
+        for company in COMP_LIST:
             if company in comment:
                 related_dict = tb_sentiment.related_words(company, comment)
                 yield company, (1, related_dict)
@@ -60,9 +71,10 @@ class t_companies_baskets(MRJob):
 
     def reducer_final(self):
         for i in range(100):
-            yield self.companies[i], (self.comp_count[i] ,self.related_words[i])
+            yield self.companies[i] ,self.related_words[i]
 
 
 
 if __name__ == '__main__':
+    load_lst()
     t_companies_baskets.run()
