@@ -61,6 +61,6 @@ def make_data_struct(data_dict, training_set, typ, date, quarter):
 
         x.append(total / count)
 
-    data_table = pd.DataFrame({key: x, 'Earnings': y})
+    data_table = pd.DataFrame({'Sentiment': x, 'Earnings': y})
 
     return data_table

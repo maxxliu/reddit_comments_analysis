@@ -52,3 +52,16 @@ def product_sentiment(product, comment):
             total_sentiment += analysis.sentiment.polarity
 
     return mentions, total_sentiment
+
+
+def related_words(key_word, to_use):
+    '''
+    '''
+    related = {}
+    tagged_words = nltk.pos_tag(to_use)
+
+    for info in tagged_words:
+        if info[1] in RELATED_WORD_TAGS and info[0] != key_word:
+            related[info[0]] = related.get(info[0], 0) + 1
+
+    return related

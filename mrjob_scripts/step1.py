@@ -1,7 +1,7 @@
 from mrjob.job import MRJob
 import re
 import json
-import tb_sentiment
+import helper
 
 
 COMP_LIST = []
@@ -15,21 +15,24 @@ def load_lst():
 
 class t_companies_baskets(MRJob):
     '''
-    yields 3 lists of commenters: 
+    yields 3 lists of commenters:
     1. Commenters with highest upvote counts
     2. Commenters that are the meanest
     3. Commenters that are the nicest
     '''
 
     def mapper(self, _, line):
-        j = json.loads(line)
+        j = helper.clean_line(line)
+
         comment = j['body']
         words = set([x.strip(",.'!?/:;-_#$[]()%*") for x in comment.split(' ')])
         to_use = [x for x in words if x not in helper.STOPWORDS]
-        for company in COMP_LIST:
-            if company in comment:
-                related_dict = tb_sentiment.related_words(company, comment)
+
+        for word in to_use:
+            if word in COMP_LIST:
+                related_dict = helper.related_words(company, to_use)
                 yield company, (1, related_dict)
+
 
     def combiner(self, company, count_dict_tuple):
         count = 0
