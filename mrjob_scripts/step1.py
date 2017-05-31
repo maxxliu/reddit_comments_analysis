@@ -4,7 +4,7 @@ import json
 import helper
 
 
-COMP_LIST = []
+COMP_LIST = set()
 
 
 def load_lst(csv_file):
@@ -14,8 +14,7 @@ def load_lst(csv_file):
     csv = open(csv_file)
     for i in csv:
         i = i.strip('\n')
-        COMP_LIST.append(i)
-    COMP_LIST.pop(0)
+        COMP_LIST.add(i)
 
 
 class t_companies_baskets(MRJob):

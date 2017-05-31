@@ -5,7 +5,7 @@ import nltk.tokenize
 import re
 
 
-PRODUCTS = []
+PRODUCTS = set()
 
 
 def add_products(txt_file):
@@ -16,7 +16,7 @@ def add_products(txt_file):
     txt = open(txt_file)
     for item in txt:
         p = re.findall(helper.PATTERN, item)
-        PRODUCTS.extend(p)
+        PRODUCTS.update(p)
 
 
 class ProductSentiment(MRJob):

@@ -106,7 +106,10 @@ def mk_data_strct(data_dict, training_set, companies, m_r, w_r, quarter):
     w_r (tuple) - range of weeks to look at
     quarter (int) - which quarter are we analyzing?
     '''
-    
+    frames = []
+
+    # add the weekly data
+
 
 
 
