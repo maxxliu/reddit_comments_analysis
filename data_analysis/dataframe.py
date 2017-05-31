@@ -1,6 +1,24 @@
 import re
 import pandas as pd
 
+PATTERN = '[a-zA-Z]+'
+
+def top_companies(txt_file):
+    '''
+    creates dictionary of top companies and their buckets of products
+
+    txt_file (txt) - txt file from the first mapreduce function with the
+                        top companies
+    '''
+    txt = open(txt_file)
+    d = {}
+
+    for line in txt:
+        words = re.findall(PATTERN, line)
+        key = words.pop(0)
+        d[key] = words
+
+    return d
 
 def training_data(txt_file, csv_file):
     '''
@@ -11,10 +29,13 @@ def training_data(txt_file, csv_file):
     '''
     pass
 
-def read_txt_file(txt_file):
+def read_sent_file(txt_file):
     '''
-    reads the txt file returned by the mapreduce and return easily searchable
+    reads the sent file returned by the mapreduce and return easily searchable
     dictionary of all of the data
+
+    txt_file (txt) - this is the text file from running the second mapreduce,
+                        it should have all of the sentiment data
     '''
     num_pattern = '[0-9]+\.[0-9]+|[0-9]+'
     name_pattern = '([a-zA-Z]+)\d'
@@ -28,11 +49,11 @@ def read_txt_file(txt_file):
         name = re.findall(name_pattern, item[0])[0]
         data_type = item[0][-2] # whether we are looking at month or week
         date = int(re.findall(date_pattern, item[0])[0]) # week/month number
-        if name in data_items:
-            data_items[name][data_type][date] = nums
+        if name in data_dict:
+            data_dict[name][data_type][date] = nums
         else:
-            data_items[name] = {'m': {}, 'w': {}}
-            data_items[name][data_type][date] = nums
+            data_dict[name] = {'m': {}, 'w': {}}
+            data_dict[name][data_type][date] = nums
 
     return data_dict
 

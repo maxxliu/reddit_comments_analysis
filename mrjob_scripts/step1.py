@@ -6,12 +6,17 @@ import helper
 
 COMP_LIST = []
 
-def load_lst():
-    csv = open('companylist.csv')
+
+def load_lst(csv_file):
+    '''
+    csv_file (csv) - file with the largest 1000 companies
+    '''
+    csv = open(csv_file)
     for i in csv:
         i = i.strip('\n')
         COMP_LIST.append(i)
     COMP_LIST.pop(0)
+
 
 class t_companies_baskets(MRJob):
     '''
@@ -21,17 +26,19 @@ class t_companies_baskets(MRJob):
     3. Commenters that are the nicest
     '''
 
+
     def mapper(self, _, line):
         j = helper.clean_line(line)
 
         comment = j['body']
-        words = set([x.strip(",.'!?/:;-_#$[]()%*") for x in comment.split(' ')])
+        words = re.findall(helper.PATTERN, comment)
+        words = set(words)
         to_use = [x for x in words if x not in helper.STOPWORDS]
 
         for word in to_use:
             if word in COMP_LIST:
-                related_dict = helper.related_words(company, to_use)
-                yield company, (1, related_dict)
+                related_dict = helper.related_words(word, to_use)
+                yield word, (1, related_dict)
 
 
     def combiner(self, company, count_dict_tuple):
@@ -44,7 +51,6 @@ class t_companies_baskets(MRJob):
                     related_dict[word] = 0
                 related_dict[word] += values
         yield company, (count, related_dict)
-
 
 
     def reducer_init(self):
@@ -77,7 +83,6 @@ class t_companies_baskets(MRJob):
             yield self.companies[i] ,self.related_words[i]
 
 
-
 if __name__ == '__main__':
-    load_lst()
+    load_lst('companylist.csv')
     t_companies_baskets.run()

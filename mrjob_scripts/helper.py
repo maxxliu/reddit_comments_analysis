@@ -6,9 +6,13 @@ import time
 import datetime
 
 
+PATTERN = '[a-zA-Z]+'
+
+
 DATES = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05',
             'Jun': '06', 'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10',
             'Nov': '11', 'Dec': '12'}
+
 
 STOPWORDS = set(stopwords.words('english'))
 RELATED_WORD_TAGS = ['NN', 'NNS', 'NNP', 'NNPS', 'FW']
@@ -17,6 +21,8 @@ RELATED_WORD_TAGS = ['NN', 'NNS', 'NNP', 'NNPS', 'FW']
 def clean_line(raw_line):
     '''
     cleans raw line from data set
+
+    raw_line (string) - json string
     '''
     json_v = json.loads(raw_line)
     epoch = json_v['created_utc']
@@ -40,6 +46,10 @@ def clean_line(raw_line):
 
 def product_sentiment(product, comment):
     '''
+    tells us the sentiment towards a product word we are intersted in
+
+    product (string) - word that we are looking at sentiment for
+    comment (string) - the reddit comment
     '''
     mentions = 0
     total_sentiment = 0
@@ -56,6 +66,10 @@ def product_sentiment(product, comment):
 
 def related_words(key_word, to_use):
     '''
+    finds all of the related words in a string
+
+    key_word (string) - word that we are looking for related words for
+    to_use (list) - list of relevant words
     '''
     related = {}
     tagged_words = nltk.pos_tag(to_use)

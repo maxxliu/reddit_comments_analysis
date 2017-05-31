@@ -2,19 +2,21 @@ from mrjob.job import MRJob
 import json
 import helper
 import nltk.tokenize
+import re
+
 
 PRODUCTS = []
 
-def test():
-    PRODUCTS.append('computer')
-    PRODUCTS.append('iPod')
-    PRODUCTS.append('Jonathan')
-    PRODUCTS.append('Spencer')
-    PRODUCTS.append('Max')
-    PRODUCTS.append('test')
-    PRODUCTS.append('school')
-    PRODUCTS.append('study')
-    PRODUCTS.append('Apple')
+
+def add_products(txt_file):
+    '''
+    txt_file - this is the file with the results of the first mapreduce,
+                it has a list of 100 companies and their top 5 most mentions
+    '''
+    txt = open(txt_file)
+    for item in txt:
+        p = re.findall(helper.PATTERN, item)
+        PRODUCTS.extend(p)
 
 
 class ProductSentiment(MRJob):
@@ -22,7 +24,9 @@ class ProductSentiment(MRJob):
         json_v = helper.clean_line(line)
 
         words = json_v['body']
-        words = set([x.strip(",.'!?/:;-_#$[]()%*") for x in words.split(' ')])
+        words = re.findall(helper.PATTERN, words)
+        # words = set([x.strip(",.'!?/:;-_#$[]()%*") for x in words.split(' ')])
+        words = set(words)
         to_use = [x for x in words if x not in helper.STOPWORDS]
 
         for word in to_use:
@@ -58,5 +62,5 @@ class ProductSentiment(MRJob):
 
 
 if __name__=='__main__':
-    test()
+    add_products('../data_analysis/testing_comps.txt')
     ProductSentiment.run()
