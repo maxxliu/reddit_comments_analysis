@@ -10,10 +10,17 @@ class t_companies_baskets(MRJob):
     '''
     def mapper_init(self):
         self.comp_list = set()
+        self. stopwords = set()
+
         csv = open('companylist.csv')
         for i in csv:
             i = i.strip('\n')
             self.comp_list.add(i)
+
+        stop = open('stopwords.csv')
+        for s in stop:
+            s = s.strip('\n')
+            self.stopwords.add(s)
 
 
     def mapper(self, _, line):
@@ -22,11 +29,11 @@ class t_companies_baskets(MRJob):
         comment = j['body']
         words = re.findall(helper.PATTERN, comment)
         words = set(words)
-        to_use = [x for x in words if x not in helper.STOPWORDS]
+        to_use = [x for x in words if x not in self.stopwords]
 
         for word in to_use:
             if word in self.comp_list:
-                related_dict = helper.related_words(word, to_use)
+                related_dict = helper.related_words(word, comment)
                 yield word, (1, related_dict)
 
 

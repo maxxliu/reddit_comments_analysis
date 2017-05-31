@@ -1,5 +1,3 @@
-import nltk.tokenize
-from nltk.corpus import stopwords
 from textblob import TextBlob
 import json
 import time
@@ -14,7 +12,6 @@ DATES = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05',
             'Nov': '11', 'Dec': '12'}
 
 
-STOPWORDS = set(stopwords.words('english'))
 RELATED_WORD_TAGS = ['NN', 'NNS', 'NNP', 'NNPS', 'FW']
 
 
@@ -53,28 +50,28 @@ def product_sentiment(product, comment):
     '''
     mentions = 0
     total_sentiment = 0
-    sent_list = nltk.sent_tokenize(comment)
+    blob = TextBlob(comment)
 
-    for sent in sent_list:
+    for sent in blob.sentences:
         if product in sent:
             mentions += 1
-            analysis = TextBlob(sent)
-            total_sentiment += analysis.sentiment.polarity
+            analysis = sent.sentiment.polarity
+            total_sentiment += analysis
 
     return mentions, total_sentiment
 
 
-def related_words(key_word, to_use):
+def related_words(key_word, comment):
     '''
     finds all of the related words in a string
 
     key_word (string) - word that we are looking for related words for
-    to_use (list) - list of relevant words
+    comment (string) - comment string
     '''
     related = {}
-    tagged_words = nltk.pos_tag(to_use)
+    blob = TextBlob(comment)
 
-    for info in tagged_words:
+    for info in blob.tags:
         if info[1] in RELATED_WORD_TAGS and info[0] != key_word:
             related[info[0]] = related.get(info[0], 0) + 1
 
