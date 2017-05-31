@@ -5,21 +5,18 @@ import nltk.tokenize
 import re
 
 
-PRODUCTS = set()
-
-
-def add_products(txt_file):
-    '''
-    txt_file - this is the file with the results of the first mapreduce,
-                it has a list of 100 companies and their top 5 most mentions
-    '''
-    txt = open(txt_file)
-    for item in txt:
-        p = re.findall(helper.PATTERN, item)
-        PRODUCTS.update(p)
-
-
 class ProductSentiment(MRJob):
+    '''
+    finds sentiment for each of the products we care about
+    '''
+    def mapper_init(self):
+        self.products = set()
+        txt = open('testing_comps.txt')
+        for item in txt:
+            p = re.findall(helper.PATTERN, item)
+            self.products.update(p)
+
+
     def mapper(self, _, line):
         json_v = helper.clean_line(line)
 
@@ -30,7 +27,7 @@ class ProductSentiment(MRJob):
         to_use = [x for x in words if x not in helper.STOPWORDS]
 
         for word in to_use:
-            if word in PRODUCTS:
+            if word in self.products:
                 score = helper.product_sentiment(word, json_v['body'])
                 # score = (mentions, total_sentiment)
 
@@ -62,5 +59,4 @@ class ProductSentiment(MRJob):
 
 
 if __name__=='__main__':
-    add_products('../data_analysis/testing_comps.txt')
     ProductSentiment.run()

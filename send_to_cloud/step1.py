@@ -4,27 +4,16 @@ import json
 import helper
 
 
-COMP_LIST = []
-
-
-def load_lst(csv_file):
-    '''
-    csv_file (csv) - file with the largest 1000 companies
-    '''
-    csv = open(csv_file)
-    for i in csv:
-        i = i.strip('\n')
-        COMP_LIST.append(i)
-    COMP_LIST.pop(0)
-
-
 class t_companies_baskets(MRJob):
     '''
-    yields 3 lists of commenters:
-    1. Commenters with highest upvote counts
-    2. Commenters that are the meanest
-    3. Commenters that are the nicest
+    finds the top 100 companies and their top mentioned words
     '''
+    def mapper_init(self):
+        self.comp_list = set()
+        csv = open('companylist.csv')
+        for i in csv:
+            i = i.strip('\n')
+            self.comp_list.add(i)
 
 
     def mapper(self, _, line):
@@ -36,7 +25,7 @@ class t_companies_baskets(MRJob):
         to_use = [x for x in words if x not in helper.STOPWORDS]
 
         for word in to_use:
-            if word in COMP_LIST:
+            if word in self.comp_list:
                 related_dict = helper.related_words(word, to_use)
                 yield word, (1, related_dict)
 
@@ -84,5 +73,4 @@ class t_companies_baskets(MRJob):
 
 
 if __name__ == '__main__':
-    load_lst('companylist.csv')
     t_companies_baskets.run()
