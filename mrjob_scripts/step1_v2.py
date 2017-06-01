@@ -26,6 +26,7 @@ class t_companies_baskets(MRJob):
 
 
     def mapper(self, _, line):
+        print(line)
         json_v = json.loads(line)
         comment = json_v['body']
         comment = comment.replace('\n', '')
