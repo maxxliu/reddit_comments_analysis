@@ -70,7 +70,7 @@ class ProductSentiment(MRJob):
                 score = (mentions, total_sentiment)
 
                 key1 = word + str(week_num) + 'w'
-                key2 = word + month + 'm'
+                key2 = word + n_mnth + 'm'
 
                 yield key1, score
                 yield key2, score

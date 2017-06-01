@@ -22,7 +22,7 @@ def json_csv(txt_file):
     '''
     turns json txt file to csv file
     '''
-    my_txt = open(txt_file + '.csv', 'wt')
+    my_csv = open(txt_file + '.csv', 'wt')
     csv_writer = csv.writer(my_csv)
 
     for line in open(txt_file):
