@@ -2,6 +2,7 @@ from mrjob.job import MRJob
 import re
 import json
 from textblob import TextBlob
+import os
 
 '''
 this mapreduce DOES NOT require the helper.py file
@@ -13,6 +14,7 @@ class t_companies_baskets(MRJob):
     finds the top 100 companies and their top mentioned words
     '''
     def mapper_init(self):
+        os.system('python3 -m textblob.download_corpora')
         self.comp_list = set()
         self.stopwords = set()
         self.related_word_tags = ['NN', 'NNS', 'NNP', 'NNPS', 'FW']
