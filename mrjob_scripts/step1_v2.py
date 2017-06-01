@@ -3,6 +3,10 @@ import re
 import json
 from textblob import TextBlob
 
+'''
+this mapreduce DOES NOT require the helper.py file
+this mapreduce takes in the UNPROCESSED files
+'''
 
 class t_companies_baskets(MRJob):
     '''

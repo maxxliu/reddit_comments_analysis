@@ -3,6 +3,10 @@ import re
 import json
 import helper
 
+'''
+this mapreduce REQUIRES the helper.py file
+this mapreduce takes in the UNPROCESSED files
+'''
 
 class t_companies_baskets(MRJob):
     '''

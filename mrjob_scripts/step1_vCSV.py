@@ -3,6 +3,9 @@ import re
 import json
 from textblob import TextBlob
 
+'''
+this mapreduce can take in a CSV file OR a TXT file
+'''
 
 class t_companies_baskets(MRJob):
     '''

@@ -3,6 +3,10 @@ import json
 import helper
 import re
 
+'''
+this mapreduce REQUIRES the helper.py file
+this mapreduce takes in UNPROCESSED file
+'''
 
 class ProductSentiment(MRJob):
     '''
