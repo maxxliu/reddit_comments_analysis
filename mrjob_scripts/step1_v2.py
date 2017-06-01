@@ -1,7 +1,7 @@
 from mrjob.job import MRJob
 import re
 import json
-# from textblob import TextBlob
+from textblob import TextBlob
 import os
 
 '''
@@ -48,15 +48,11 @@ class t_companies_baskets(MRJob):
         for word in to_use:
             if word in self.comp_list:
                 related = {}
-                # blob = TextBlob(comment)
+                blob = TextBlob(comment)
 
-                for info in to_use:
-                    if info != word:
-                        related[info] = related.get(info, 0) + 1
-
-                # for info in blob.tags:
-                #     if info[1] in self.related_word_tags and info[0] != word:
-                #         related[info[0]] = related.get(info[0], 0) + 1
+                for info in blob.tags:
+                    if info[1] in self.related_word_tags and info[0] != word:
+                        related[info[0]] = related.get(info[0], 0) + 1
 
                 yield word, (1, related)
 
