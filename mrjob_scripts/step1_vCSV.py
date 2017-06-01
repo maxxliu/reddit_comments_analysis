@@ -26,29 +26,26 @@ class t_companies_baskets(MRJob):
 
 
     def mapper(self, _, line):
-        try:
-            csv_line = line.split(',')
-            comment = csv_line[0]
-            comment = comment.replace('%', '')
-            comment = comment.replace('*', '')
-            comment = comment.replace('gt', '')
+        csv_line = line.split(',')
+        comment = csv_line[0]
+        comment = comment.replace('%', '')
+        comment = comment.replace('*', '')
+        comment = comment.replace('gt', '')
 
-            words = re.findall(self.pattern, comment)
-            words = set(words)
-            to_use = [x for x in words if x not in self.stopwords]
+        words = re.findall(self.pattern, comment)
+        words = set(words)
+        to_use = [x for x in words if x not in self.stopwords]
 
-            for word in to_use:
-                if word in self.comp_list:
-                    related = {}
-                    blob = TextBlob(comment)
+        for word in to_use:
+            if word in self.comp_list:
+                related = {}
+                blob = TextBlob(comment)
 
-                    for info in blob.tags:
-                        if info[1] in self.related_word_tags and info[0] != word:
-                            related[info[0]] = related.get(info[0], 0) + 1
+                for info in blob.tags:
+                    if info[1] in self.related_word_tags and info[0] != word:
+                        related[info[0]] = related.get(info[0], 0) + 1
 
-                    yield word, (1, related)
-        except:
-            None
+                yield word, (1, related)
 
 
     def combiner(self, company, count_dict_tuple):
