@@ -40,7 +40,8 @@ def training_data(txt_file, csv_file):
         line = line.replace('\n', '')
         line = line.split(',')
         company_name = line[0]
-        companies.append(company_name)
+        if float(line[6]) < 1:
+            companies.append(company_name)
         eps = [line[6]]
         training_dict[company_name] = {}
         training_dict[company_name]['earnings'] = eps
