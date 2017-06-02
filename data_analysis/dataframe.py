@@ -41,7 +41,7 @@ def training_data(txt_file, csv_file):
         line = line.split(',')
         company_name = line[0]
         companies.append(company_name)
-        eps = [line[6]]
+        eps = [line[5]]
         training_dict[company_name] = {}
         training_dict[company_name]['earnings'] = eps
         training_dict[company_name]['products'] = data_dict[company_name]
