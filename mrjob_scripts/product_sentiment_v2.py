@@ -22,7 +22,7 @@ class ProductSentiment(MRJob):
                     'Jun': '06', 'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10',
                     'Nov': '11', 'Dec': '12'}
 
-        txt = open('testing_comps.txt')
+        txt = open('FINAL_COMP.txt')
         for item in txt:
             p = re.findall(self.pattern, item)
             self.products.update(p)
