@@ -45,11 +45,12 @@ class t_companies_baskets(MRJob):
         words = re.findall(self.pattern, comment)
         words = set(words)
         to_use = [x for x in words if x not in self.stopwords]
+        new_str = ' '.join(to_use)
 
         for word in to_use:
             if word in self.comp_list:
                 related = {}
-                blob = TextBlob(comment)
+                blob = TextBlob(new_str)
 
                 for info in blob.tags:
                     if info[1] in self.related_word_tags and info[0] != word:
@@ -106,7 +107,7 @@ class t_companies_baskets(MRJob):
             for i in range(100):
                 cur = 99
                 temp = (value[0][i], value[1][i], value[2][i])
-                while cur > 0:
+                while cur >= 0:
                     if temp[0] > final_comp[cur][0]:
                         rm = final_comp.pop(cur)
                         final_comp.insert(cur, temp)
