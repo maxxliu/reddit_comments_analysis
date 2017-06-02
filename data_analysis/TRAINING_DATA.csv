@@ -1,97 +1,98 @@
-Wheaton Prescious Metals,0.12,0.1,0.83,0.02
-Kohl's,0.37,0.31,0.84,0.06
-Regency Centers Corp,0.3,0.49,1.63,-0.19
-Pfizer,0.55,0.67,1.22,-0.12
-HSBC Holdings,0.33,0.39,1.18,-0.06
-Nomura,1.87,-5.35,-2.86,7.22
-Salesforce,0.23,0.24,1.04,-0.01
-Mistsubishi,-244.22,-243.84,1,-0.38
-ING Group,0.9,1.42,1.58,-0.52
-EPR Properties,0.76,0.77,1.01,-0.01
-Kellog,0.94,0.97,1.03,-0.03
-Xerox,0.23,0.22,0.96,0.01
-Nielsen Holdings,0.5,0.51,1.02,-0.01
-Mastercard,0.85,0.86,1.01,-0.01
-Maximus Incorporated,0.62,0.74,1.19,-0.12
-Tupperware,0.86,0.91,1.06,-0.05
-Domino's Pizza,0.98,0.89,0.91,0.09
-Exxon Mobil,0.63,0.67,1.06,-0.04
-Lowes Companies,0.85,0.87,1.02,-0.02
-Shopify,-0.9,-0.6,0.67,-0.3
-Alibaba,3.6,3.02,0.84,0.58
-Toro Company,0.9,0.95,1.06,-0.05
-AES Corp,0.2,0.13,0.65,0.07
-Carlisle Companies,0.82,1.06,1.29,-0.24
-Donaldson Incorporated,0.39,0.43,1.1,-0.04
-Barclays,4.45,3.38,0.76,1.07
-Pearson PLC,-2.67,-1.3,0.49,-1.37
-Nokia,0.04,0.03,0.75,0.01
-Brunswick Corporation,0.71,0.71,1,0
-Macy's,0.36,0.4,1.11,-0.04
-Hershey's,1.07,1.1,1.03,-0.03
-Nordstrom,0.45,0.26,0.58,0.19
-Apache Corporation,-0.89,-0.4,0.45,-0.49
-Aegon,0.17,0.17,1,0
-Molson Coors Brewing,0.56,0.54,0.96,0.02
-NCR Corporation,0.33,0.38,1.15,-0.05
-Korea Telecom,"1,637.50","2,255.00",1.38,-617.5
-Kroger Company,0.69,0.7,1.01,-0.01
-Fidelity,0.04,0.08,2,-0.04
-Hyatt Hotels,0.25,0.25,1,0
-SAP,0.71,0.64,0.9,0.07
-Huntsman Corp,0.27,0.37,1.37,-0.1
-Gap,0.32,0.32,1,0
-Paramount Group,-0.05,-0.03,0.6,-0.02
-LINE Corporation,15.44,13.91,0.9,1.53
-CVS,1.16,1.18,1.02,-0.02
-Deluxe Corporation,1.15,1.19,1.03,-0.04
-PPL Corporation,0.74,0.67,0.91,0.07
-Monsanto,2.4,2.17,0.9,0.23
-Boeing,1.82,1.74,0.96,0.08
-Hilton Worldwide,0.48,0.51,1.06,-0.03
-FedEx,3.28,3.3,1.01,-0.02
-PPG Industries,1.3,1.31,1.01,-0.01
-AMC Networks,1.79,1.99,1.11,-0.2
-Kirby Corporation,0.78,0.77,0.99,0.01
-Polaris Industries,0.71,0.71,1,0
-Enterprise,0.49,0.54,1.1,-0.05
-CBS Corporation,0.94,1.02,1.09,-0.08
-Progressive,0.5,0.42,0.84,0.08
-Citigroup,1.03,1.1,1.07,-0.07
-Chipotle,-0.95,-0.88,0.93,-0.07
-Coach Incorporated,0.41,0.44,1.07,-0.03
-Rollins Incorporated,0.15,0.15,1,0
-Oracle,0.81,0.81,1,0
-Pepsi,0.81,0.89,1.1,-0.08
-Barnes Group,0.54,0.54,1,0
-Sprint,-0.12,-0.14,1.17,0.02
-Visa,0.67,0.68,1.01,-0.01
-Canon,0.33,0.22,0.67,0.11
-Ferrari,0.35,0.41,1.17,-0.06
-Toyota Motor,153.13,139.92,0.91,13.21
-General Electric,0.19,0.21,1.11,-0.02
-Facebook,0.62,0.77,1.24,-0.15
-BP,-0.17,0.17,-1,-0.34
-Samsung,"31,193.34","36,356.00",1.17,-5162.66
-Nike,0.48,0.49,1.02,-0.01
-Verizon Communications,1.06,1.06,1,0
-Harris Corporation,1.39,1.45,1.04,-0.06
-Square Incorporated,-0.09,-0.27,3,0.18
-Honda,44.78,-51.58,-1.15,96.36
-McDonald's,1.16,1.23,1.06,-0.07
-RPM International,1.01,1.13,1.12,-0.12
-Orange,1.06,1.15,1.08,-0.09
-ITT Corporation,0.59,0.59,1,0
-Dick's Sporting Goods,0.49,0.5,1.02,-0.01
-Target,1.19,1.29,1.08,-0.1
-DDR Corporation,0.01,0.11,11,-0.1
-Carter's Incorporated,1,1.05,1.05,-0.05
-Ford Motor,0.48,0.68,1.42,-0.2
-Walmart,0.88,0.98,1.11,-0.1
-Sony,-0.28,0.15,-0.54,-0.43
-LG Electronics,875.49,"1,058.00",1.21,-182.51
-Microsoft,0.64,0.62,0.97,0.02
-Twitter,0.1,0.15,1.5,-0.05
-HP,0.42,0.42,1,0
-Apple,2,1.9,0.95,0.1
-Disney,1.4,1.36,0.97,0.04
+Chevron,Chevron,-2,-0.11,0.06,1.89,0.945
+Wheaton,Wheaton Prescious Metals,0.12,0.1,0.83,-0.02,-0.166666667
+Kohl,Kohl's,0.37,0.31,0.84,-0.06,-0.162162162
+Regency,Regency Centers Corp,0.3,0.49,1.63,0.19,0.633333333
+Pfizer,Pfizer,0.55,0.67,1.22,0.12,0.218181818
+HSBC,HSBC Holdings,0.33,0.39,1.18,0.06,0.181818182
+Nomura,Nomura,1.87,-5.35,-2.86,-7.22,-3.860962567
+Salesforce,Salesforce,0.23,0.24,1.04,0.01,0.043478261
+Mitsubishi,Mitsubishi,-244.22,-243.84,1,0.38,0.001555974
+ING,ING Group,0.9,1.42,1.58,0.52,0.577777778
+EPR,EPR Properties,0.76,0.77,1.01,0.01,0.013157895
+Kellogg,Kellogg,0.94,0.97,1.03,0.03,0.031914894
+Xerox,Xerox,0.23,0.22,0.96,-0.01,-0.043478261
+Nielsen,Nielsen Holdings,0.5,0.51,1.02,0.01,0.02
+Mastercard,Mastercard,0.85,0.86,1.01,0.01,0.011764706
+Maximus,Maximus Incorporated,0.62,0.74,1.19,0.12,0.193548387
+Tupperware,Tupperware,0.86,0.91,1.06,0.05,0.058139535
+Domino,Domino's Pizza,0.98,0.89,0.91,-0.09,-0.091836735
+Exxon,Exxon Mobil,0.63,0.67,1.06,0.04,0.063492063
+Lowes,Lowes Companies,0.85,0.87,1.02,0.02,0.023529412
+Shopify,Shopify,-0.9,-0.6,0.67,0.3,0.333333333
+Alibaba,Alibaba,3.6,3.02,0.84,-0.58,-0.161111111
+Toro,Toro Company,0.9,0.95,1.06,0.05,0.055555556
+AES,AES Corp,0.2,0.13,0.65,-0.07,-0.35
+Carlisle,Carlisle Companies,0.82,1.06,1.29,0.24,0.292682927
+Donaldson,Donaldson Incorporated,0.39,0.43,1.1,0.04,0.102564103
+Barclays,Barclays,4.45,3.38,0.76,-1.07,-0.240449438
+Pearson,Pearson PLC,-2.67,-1.3,0.49,1.37,0.513108614
+Nokia,Nokia,0.04,0.03,0.75,-0.01,-0.25
+Brunswick,Brunswick Corporation,0.71,0.71,1,0,0
+Macy,Macy's,0.36,0.4,1.11,0.04,0.111111111
+Hershey,Hershey's,1.07,1.1,1.03,0.03,0.028037383
+Nordstrom,Nordstrom,0.45,0.26,0.58,-0.19,-0.422222222
+Apache,Apache Corporation,-0.89,-0.4,0.45,0.49,0.550561798
+Aegon,Aegon,0.17,0.17,1,0,0
+Coors,Molson Coors Brewing,0.56,0.54,0.96,-0.02,-0.035714286
+NCR,NCR Corporation,0.33,0.38,1.15,0.05,0.151515152
+KT,Korea Telecom,"1,637.50","2,255.00",1.38,617.5,0.377099237
+Kroger,Kroger Company,0.69,0.7,1.01,0.01,0.014492754
+Fidelity,Fidelity,0.04,0.08,2,0.04,1
+Hyatt,Hyatt Hotels,0.25,0.25,1,0,0
+SAP,SAP,0.71,0.64,0.9,-0.07,-0.098591549
+Huntsman,Huntsman Corp,0.27,0.37,1.37,0.1,0.37037037
+Gap,Gap,0.32,0.32,1,0,0
+Paramount,Paramount Group,-0.05,-0.03,0.6,0.02,0.4
+LINE,LINE Corporation,15.44,13.91,0.9,-1.53,-0.099093264
+CVS,CVS,1.16,1.18,1.02,0.02,0.017241379
+Deluxe,Deluxe Corporation,1.15,1.19,1.03,0.04,0.034782609
+PPL,PPL Corporation,0.74,0.67,0.91,-0.07,-0.094594595
+Monsanto,Monsanto,2.4,2.17,0.9,-0.23,-0.095833333
+Boeing,Boeing,1.82,1.74,0.96,-0.08,-0.043956044
+Hilton,Hilton Worldwide,0.48,0.51,1.06,0.03,0.0625
+FedEx,FedEx,3.28,3.3,1.01,0.02,0.006097561
+PPG,PPG Industries,1.3,1.31,1.01,0.01,0.007692308
+AMC,AMC Networks,1.79,1.99,1.11,0.2,0.111731844
+Kirby,Kirby Corporation,0.78,0.77,0.99,-0.01,-0.012820513
+Polaris,Polaris Industries,0.71,0.71,1,0,0
+Enterprise,Enterprise,0.49,0.54,1.1,0.05,0.102040816
+CBS,CBS Corporation,0.94,1.02,1.09,0.08,0.085106383
+Progressive,Progressive,0.5,0.42,0.84,-0.08,-0.16
+Citi,Citigroup,1.03,1.1,1.07,0.07,0.067961165
+Chipotle,Chipotle,-0.95,-0.88,0.93,0.07,0.073684211
+Coach,Coach Incorporated,0.41,0.44,1.07,0.03,0.073170732
+Rollins,Rollins Incorporated,0.15,0.15,1,0,0
+Oracle,Oracle,0.81,0.81,1,0,0
+Pepsi,Pepsi,0.81,0.89,1.1,0.08,0.098765432
+Barnes,Barnes Group,0.54,0.54,1,0,0
+Sprint,Sprint,-0.12,-0.14,1.17,-0.02,0.166666667
+Visa,Visa,0.67,0.68,1.01,0.01,0.014925373
+Canon,Canon,0.33,0.22,0.67,-0.11,-0.333333333
+Ferrari,Ferrari,0.35,0.41,1.17,0.06,0.171428571
+Toyota,Toyota Motor,153.13,139.92,0.91,-13.21,-0.086266571
+GE,General Electric,0.19,0.21,1.11,0.02,0.105263158
+snapchat,Facebook,0.62,0.77,1.24,0.15,0.241935484
+BP,BP,-0.17,0.17,-1,0.34,2
+Dell,Samsung,"31,193.34","36,356.00",1.17,5162.66,0.165505201
+Nike,Nike,0.48,0.49,1.02,0.01,0.020833333
+Verizon,Verizon Communications,1.06,1.06,1,0,0
+Harris,Harris Corporation,1.39,1.45,1.04,0.06,0.043165468
+Square,Square Incorporated,-0.09,-0.27,3,-0.18,2
+Honda,Honda,44.78,-51.58,-1.15,-96.36,-2.151853506
+McDonald,McDonald's,1.16,1.23,1.06,0.07,0.060344828
+RPM,RPM International,1.01,1.13,1.12,0.12,0.118811881
+Orange,Orange,1.06,1.15,1.08,0.09,0.08490566
+ITT,ITT Corporation,0.59,0.59,1,0,0
+Dick,Dick's Sporting Goods,0.49,0.5,1.02,0.01,0.020408163
+Target,Target,1.19,1.29,1.08,0.1,0.084033613
+DDR,DDR Corporation,0.01,0.11,11,0.1,10
+Carter,Carter's Incorporated,1,1.05,1.05,0.05,0.05
+Ford,Ford Motor,0.48,0.68,1.42,0.2,0.416666667
+Walmart,Walmart,0.88,0.98,1.11,0.1,0.113636364
+Sony,Sony,-0.28,0.15,-0.54,0.43,1.535714286
+LG,LG Electronics,875.49,"1,058.00",1.21,182.51,0.208466116
+Microsoft,Microsoft,0.64,0.62,0.97,-0.02,-0.03125
+Twitter,Twitter,0.1,0.15,1.5,0.05,0.5
+HP,HP,0.42,0.42,1,0,0
+Apple,Apple,2,1.9,0.95,-0.1,-0.05
+Disney,Disney,1.4,1.36,0.97,-0.04,-0.028571428

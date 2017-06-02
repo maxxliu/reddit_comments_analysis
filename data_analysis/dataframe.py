@@ -20,7 +20,7 @@ def top_companies(txt_file):
         d[key] = words
         companies.append(key)
 
-    return d, companies
+    return d
 
 def training_data(txt_file, csv_file):
     '''
@@ -28,8 +28,25 @@ def training_data(txt_file, csv_file):
     training data as well as bucket data
     data = {'Apple': {'earnings': [1, 2, 3, 4],
                         'products': [iPhone, iPod]}
+
+    txt_file - company and buckets
+    csv_file - training data
     '''
-    pass
+    data_dict = top_companies(txt_file)
+    training_dict = {}
+    companies = []
+    training_csv = open(csv_file)
+    for line in training_csv:
+        line = line.replace('\n', '')
+        line = line.split(',')
+        company_name = line[0]
+        companies.append(company_name)
+        eps = [line[6]]
+        training_dict[company_name] = {}
+        training_dict[company_name]['earnings'] = eps
+        training_dict[company_name]['products'] = data_dict[company_name]
+
+    return training_dict, companies
 
 
 def read_sent_file(txt_file):
@@ -81,14 +98,17 @@ def single_dp(data_dict, training_set, companies, typ, date, quarter):
         total = 0
 
         for item in training_set[company]['products']:
-            count += data_dict[item][typ][date][0]
-            total += data_dict[item][typ][date][1]
+            try:
+                count += data_dict[item][typ][date][0]
+                total += data_dict[item][typ][date][1]
+            except: #if no data exits
+                None
 
         averages.append(total / count)
         counts.append(total)
 
-    avg_key = typ + int(date) + 'avg'
-    count_key = typ + int(date) + 'cnt'
+    avg_key = typ + str(date) + 'avg'
+    count_key = typ + str(date) + 'cnt'
     temp_df = pd.DataFrame({avg_key: averages, count_key: counts})
 
     return temp_df
@@ -110,31 +130,40 @@ def mk_data_strct(data_dict, training_set, companies, m_r, w_r, quarter):
 
     # add the weekly data
     for week in range(w_r[0], w_r[1]):
-        t_df = single_dp(data_dict, training_set, companies, 'w', week, quarter)
+        t_df = single_dp(data_dict, training_set, companies, 'w', week, quarter-1)
+        frames.append(t_df)
 
+    #add the monthly data
+    for month in range(m_r[0], m_r[1]):
+        t_df = single_dp(data_dict, training_set, companies, 'm', month, quarter-1)
+        frames.append(t_df)
 
+    data_table = pd.concat(frames, axis=1)
 
+    # add actual results
+    actual = []
+    for company in companies:
+        change = training_set[company]['earnings'][quarter-1]
+        actual.append(change)
 
-
-
-
-
-
-
-
-    x = []
-    y = []
-    for key, value in training_set.items():
-        y.append(value['earnings'][quarter - 1])
-
-        count = 0
-        total = 0
-        for item in value['products']:
-            count += data_dict[item][typ][date][0]
-            total += data_dict[item][typ][date][1]
-
-        x.append(total / count)
-
-    data_table = pd.DataFrame({'Sentiment': x, 'Earnings': y})
+    data_table['EPS'] = actual
 
     return data_table
+
+
+def CREATE_DATAFRAME(text_file, csv_file, sent_file, m_r, w_r, quarter):
+    '''
+    creates the whole pandas data frame
+
+    text_file - company and buckets
+    csv_file - training data
+    sent_file - sentiment data
+    m_r (tuple) - range of months to look at
+    w_r (tuple) - range of weeks to look at
+    quarter (int) - which quarter are we analyzing?
+    '''
+    data_dict = read_sent_file(sent_file)
+    training_set, companies = training_data(text_file, csv_file)
+    dataframe = mk_data_strct(data_dict, training_set, companies, m_r, w_r, quarter)
+
+    return dataframe
