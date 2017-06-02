@@ -109,6 +109,8 @@ def mk_data_strct(data_dict, training_set, companies, m_r, w_r, quarter):
     frames = []
 
     # add the weekly data
+    for week in range(w_r[0], w_r[1]):
+        t_df = single_dp(data_dict, training_set, companies, 'w', week, quarter)
 
 
 
