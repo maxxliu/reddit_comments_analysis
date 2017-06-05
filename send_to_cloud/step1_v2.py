@@ -45,6 +45,7 @@ class t_companies_baskets(MRJob):
         words = re.findall(self.pattern, comment)
         words = set(words)
         to_use = [x for x in words if x not in self.stopwords]
+        to_use = [x for x in to_use if x.lower() not in self.stopwords]
         new_str = ' '.join(to_use)
 
         for word in to_use:
