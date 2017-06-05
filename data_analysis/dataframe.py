@@ -105,7 +105,10 @@ def single_dp(data_dict, training_set, companies, typ, date, quarter):
             except: #if no data exits
                 None
 
-        averages.append(total / count)
+        if count > 0:
+            averages.append(total / count)
+        else:
+            averages.append(0)
         counts.append(total)
 
     avg_key = typ + str(date) + 'avg'
