@@ -206,20 +206,19 @@ def test_r_squared(X_test, y_test, beta_list, predictors_list):
     return test_r2 
 
 
-def add_ones_column(A):
+def add_ones_column(exp_array):
     '''
     Adds a ones column to the left side of an array
 
-    Inputs: 
-        A: an array
+    Inputs: A: an array
 
     Output: an array with a ones column.
     '''
-    ones_col = np.ones((A.shape[0], 1))
-    return np.c_[ones_col, A]
+    ones_col = np.ones((exp_array.shape[0], 1))
+    return np.c_[ones_col, exp_array]
 
 
-def linear_regression(X, y):
+def linear_regression(exp_array, actual_obs_values):
     '''
     Computes a multi-linear regression. Finds the beta of 
     a least squared model.
@@ -228,14 +227,14 @@ def linear_regression(X, y):
 
     Outputs: beta of a least squared model.
     '''
-    X_plus_ones = add_ones_column(X)
-    beta = np.linalg.lstsq(X_plus_ones, y)[0]
+    X_plus_ones = add_ones_column(exp_array)
+    beta = np.linalg.lstsq(X_plus_ones, actual_obs_values)[0]
 
     return beta
 
 
 
-def apply_beta(beta, X):
+def apply_beta(beta, exp_array):
     '''
     Takes in a beta and an array of explanatory variables 
     and generates the predicted observed values.
@@ -246,7 +245,7 @@ def apply_beta(beta, X):
     '''
 
     # Add a column of ones
-    X_incl_ones = add_ones_column(X)
+    X_incl_ones = add_ones_column(exp_array)
 
     # Calculate X*beta
     yhat = np.dot(X_incl_ones, beta)
