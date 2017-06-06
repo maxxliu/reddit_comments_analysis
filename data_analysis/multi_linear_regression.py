@@ -6,24 +6,70 @@ import numpy as np
 import pandas as pd
 import random
 import dataframe
-#from asserts import assert_Xy, assert_Xbeta
+
+def success_and_r2_avg(comp_list_txt, train_data_csv, sent_csv, num_predictors,total_times):
+    '''
+    Runs the command function x amount of times and finds the average
+    success score and R^2 score
+
+    Inputs: A textfile that has a list of companies, a csv file that has 
+    companies and their EPS percentage, a csv file that has a company's 
+    sentiment scores, number of explanatory variables, and number 
+    of times we would like to run our tests.
+
+    Outputs: The average success rate and average R^2 score
+    '''
+    s_list = []
+    R2_list = []
+    for run in range(total_times):
+        df, s_rate, betas, pred_list, r2 = \
+        the_command(comp_list_txt, train_data_csv, sent_csv, num_predictors)
+        s_list.append(s_rate)
+        R2_list.append(r2)
+    return sum(s_list) / len(s_list), sum(R2_list) / len(R2_list)
 
 
-# because Guido van Rossum hates functional programming
-# http://www.artima.com/weblogs/viewpost.jsp?thread=98196
-from functools import reduce
 
-def the_command(df):
-    df = dataframe.CREATE_DATAFRAME('FINAL_COMP.txt', 'TRAINING_DATA.csv', 'FINAL_COMP_SENT.txt', (3,4), (9,10),1)
+def the_command(comp_list_txt, train_data_csv, sent_csv, num_predictors):
+    '''
+    takes in 3 files to build a dataframe, finds the x amount of predictors
+    and makes a multi-linear regression model out of them.  Using this model,
+    it tests to see if it can correctly predict if a company will beat earnings
+
+    Inputs: A textfile that has a list of companies, a csv file that has 
+    companies and their EPS percentage, a csv file that has a company's 
+    sentiment scores, number of explanatory variables, and number 
+    of times we would like to run our tests.
+
+    Outputs: original dataframe, success rate, list of beta scores,
+    a list of the predictor variables, and r2 score 
+    '''
+    df = dataframe.CREATE_DATAFRAME(comp_list_txt, \
+        train_data_csv, sent_csv, (1,4), (1,10),1)
     train_df, test_df, test_index_lst = create_trainer_dataframe(df)
-    lin_dict = model(train_df, 'EPS', ['w9avg'], ['w9cnt'])
-    s_rate = success_rate(test_df, lin_dict['beta'][0], test_index_lst, ['w9avg', 'w9cnt'], 'EPS')
-    return s_rate, lin_dict['beta'][0], ['w9avg', 'w9cnt'], 'EPS', lin_dict['R_squared'] 
+    pred_list, R2_list, beta_list = \
+    model_fitting_helper(train_df, 'EPS', 0, num_predictors)
+    s_rate = success_rate(test_df, beta_list[len(beta_list)-1], \
+        test_index_lst, pred_list, 'EPS')
+    return df, s_rate, beta_list[len(beta_list)-1], pred_list, R2_list[len(R2_list)-1]
 
 def create_trainer_dataframe(df):
-    rand_lst = random.sample(range(90),90)
-    point_index_lst = rand_lst[0:80]
-    test_index_lst = rand_lst[80:90]
+    '''
+    A helper function that breaks up original dataframe
+    Into a testing dataframe of 10 companies and a 
+    trainer dataframe made up of the rest of the companies.
+
+    Inputs: the original dataframe
+
+    Outputs: A trainer dataframe, a testing dataframe,
+    and the original dataframe indexes of all the 
+    testing companies.
+    '''
+
+    comp_count = len(df)
+    rand_lst = random.sample(range(comp_count),comp_count)
+    point_index_lst = rand_lst[0:(comp_count-10)]
+    test_index_lst = rand_lst[(comp_count-10):comp_count]
     frames = []
     for i in point_index_lst:
         frames.append(df.loc[[i]])
@@ -34,28 +80,41 @@ def create_trainer_dataframe(df):
     test_df = pd.concat(frames)
     return train_df, test_df, test_index_lst
 
-def success_rate(test_df, beta_list, test_index_lst, pred_list, response_var):
+def success_rate(test_df, beta_list, \
+    test_index_lst, pred_list, response_var):
+    '''
+    A helper function that determines how well the
+    multi-linear regression model can predict if a 
+    test company can beat earnings.
+
+    Inputs: A testing dataframe, a list of betas,
+    the indexes of the testing companies, a list 
+    of explanatory variables, and the observed variable.
+
+    Outputs: A count of successful predictions (out of 10)
+    '''
+
     success_count = 0
     for i in test_index_lst:
         val = test_df[pred_list].loc[i].values
-        pred_z = beta_list[0] + beta_list[1]*val[0] + beta_list[2]*val[1]
+        pred_z = beta_list[0]
+        for j in range(len(beta_list)-1):
+            pred_z += beta_list[j+1]*val[j] 
         act_z = test_df[[response_var]].loc[i].values
         act_z = act_z.astype(np.float)
         if (bool(act_z > 0) == bool(pred_z > 0)):
             success_count += 1
     return success_count
 
-
-
-
-
-
 def model(df, response_var, predictors_list, predictor_variables, total=False):
     '''
-    Inputs: trainer_data_set, dependent_variable_index, predictor_list, predictor_variables
-    Outputs: a dictionary with beta, R_squared, for each additional predictor_variable added onto predictors_list
+    Inputs: trainer_data_set, dependent_variable_index, 
+    predictor_list, predictor_variables
+    Outputs: a dictionary with beta, R_squared, 
+    for each additional predictor_variable added onto predictors_list
     and y_mean 
-    Also has the option of creating a dictionary with beta, R_squared, and y_mean specific to predictors_list
+    Also has the option of creating a dictionary with beta, R_squared, 
+    and y_mean specific to predictors_list
     To be used as trainer model, beta values are recycled for test data
     '''
     model = {}
@@ -85,28 +144,6 @@ def model(df, response_var, predictors_list, predictor_variables, total=False):
 
     return model
 
-def bivariate_model(X_o, y_orig, predictor_variables):
-    '''
-    compares all possible bivariate models and returns the two predictors that have highest R2 value
-    Inputs: trainer data, dependent_variable_index, predictor_variables
-    Output: A tuple with max rsquared value, first predictor, and second predictor respectively
-
-    '''
-    winner = (0, 0, 0)
-    duplicater_check = predictor_variables
-    for i in range(len(predictor_variables) - 1):
-        p_model = {}
-        p_model = model(X_o, y_orig, [i], duplicater_check)
-        potential_winner = max(p_model["R_squared"])
-        if potential_winner[0][0] > winner[0]:
-           second_predictor = potential_winner[0][1]
-           max_r_squared = potential_winner[0][0]
-           winner = (max_r_squared, i, second_predictor)
-        duplicater_check.pop(0)  
-    return winner
-
-
-
 def R_squared(y, yhat, y_mean):
     '''
     Calculates R_squared, is a helper function for model 
@@ -120,8 +157,10 @@ def R_squared(y, yhat, y_mean):
 def model_fitting_helper(df, response_var, threshold, num_var_thresh): 
     '''
     Finds which variables generate the best model
-    Inputs: trainer_data_set, dependent_variable_index, predictor_list, predictor_variables, column names, and threshold
-    Outputs: list of best variables to create best model, respective R_squared list and beta_list
+    Inputs: trainer_data_set, dependent_variable_index, predictor_list,
+     predictor_variables, column names, and threshold
+    Outputs: list of best variables to create best model, 
+    respective R_squared list and beta_list
     threshold can limit total number of variables added to list
     '''
     beta_list = []
@@ -131,7 +170,6 @@ def model_fitting_helper(df, response_var, threshold, num_var_thresh):
     past_R2 = 0
     predictor_variables = df.columns.values
     predictor_variables = predictor_variables[0:(len(predictor_variables)-1)]
-    print(predictor_variables)
     while t > threshold and len(predictors_list) < num_var_thresh:
         beta_index = 0
         R2_best = 0
@@ -150,8 +188,10 @@ def model_fitting_helper(df, response_var, threshold, num_var_thresh):
 
 def test_r_squared(X_test, y_test, beta_list, predictors_list):
     '''
-    Takes beta generated in trainer models and uses it to create new R_squared values with the new test data
-    inputs: test data, test dependent_variable_index, trainer model's generated beta lists and predictors_list
+    Takes beta generated in trainer models and uses it 
+    to create new R_squared values with the new test data
+    inputs: test data, test dependent_variable_index, trainer model's generated 
+    beta lists and predictors_list
     outputs: a list of R_squared values using the new data
     '''
     test_r2 = []
@@ -165,29 +205,15 @@ def test_r_squared(X_test, y_test, beta_list, predictors_list):
         test_r2.append(r_squared)
     return test_r2 
 
-def name_p_list(predictors_list, R2_list, col_names):
-    '''
-    Takes numerical representations of the best variable list and changes them to columns and finally prints data nicely
-    inputs: predictors list, respective R_squared list, column names
-    outputs: prints the predictors/ list of predictors and the respective R2
-    '''
-    predictors_list_n = []
-    for  name  in predictors_list:
-        predictors_list_n.append(col_names[name])
-    for i in range(len(predictors_list_n)):
-        predictors = (', ').join(predictors_list_n[: i + 1])
-        print(("{} {}:{:.2f}").format(predictors, "R2", R2_list[i]))
 
-
-
-def prepend_ones_column(A):
+def add_ones_column(A):
     '''
-    Add a ones column to the left side of an array
+    Adds a ones column to the left side of an array
 
     Inputs: 
-        A: a numpy array
+        A: an array
 
-    Output: a numpy array
+    Output: an array with a ones column.
     '''
     ones_col = np.ones((A.shape[0], 1))
     return np.c_[ones_col, A]
@@ -195,28 +221,15 @@ def prepend_ones_column(A):
 
 def linear_regression(X, y):
     '''
-    Compute linear regression. Finds model, beta, that minimizes
-    X*beta - Y in a least squared sense.
+    Computes a multi-linear regression. Finds the beta of 
+    a least squared model.
 
-    Accepts inputs with type array
-    Returns beta, which is used only by apply_beta
+    Input: An array of predictors and an array of explanatory variables
 
-    Examples
-    --------
-    >>> X = np.array([[5, 2], [3, 2], [6, 2.1], [7, 3]]) # predictors
-    >>> y = np.array([5, 2, 6, 6]) # dependent
-    >>> beta = linear_regression(X, y)  # compute the coefficients
-    >>> beta
-    array([ 1.20104895,  1.41083916, -1.6958042 ])
-    >>> apply_beta(beta, X) # apply the function defined by beta
-    array([ 4.86363636,  2.04195804,  6.1048951 ,  5.98951049])
+    Outputs: beta of a least squared model.
     '''
-    #assert_Xy(X, y, fname='linear_regression')
-
-    X_with_ones = prepend_ones_column(X)
-
-    # Do actual computation
-    beta = np.linalg.lstsq(X_with_ones, y)[0]
+    X_plus_ones = add_ones_column(X)
+    beta = np.linalg.lstsq(X_plus_ones, y)[0]
 
     return beta
 
@@ -224,55 +237,23 @@ def linear_regression(X, y):
 
 def apply_beta(beta, X):
     '''
-    Apply beta, the function generated by linear_regression, to the
-    specified values
+    Takes in a beta and an array of explanatory variables 
+    and generates the predicted observed values.
 
-    Inputs:
-        model: beta as returned by linear_regression
-        Xs: 2D array of floats
+    Inputs: Beta and an array of explanatory variables
 
-    Returns:
-        result of applying beta to the data, as an array.
-
-        Given:
-            beta = array([B0, B1, B2,...BK])
-            Xs = array([[x11, x12, ..., x0K],
-                        [x21, x22, ..., x1K],
-                        ...
-                        [xN1, xN2, ..., xNK]])
-
-            result will be:
-            array([B0+B1*x11+B2*x12+...+BK*x1K,
-                   B0+B1*x21+B2*x22+...+BK*x2K,
-                   ...
-                   B0+B1*xN1+B2*xN2+...+BK*xNK])
+    Outputs: The predicted observed values
     '''
-    #assert_Xbeta(X, beta, fname='apply_beta')
 
     # Add a column of ones
-    X_incl_ones = prepend_ones_column(X)
+    X_incl_ones = add_ones_column(X)
 
     # Calculate X*beta
     yhat = np.dot(X_incl_ones, beta)
     return yhat
 
 
-def read_file(filename):
-    '''
-    Read data from the specified file.  Split the lines and convert
-    float strings into floats.  Assumes the first row contains labels
-    for the columns.
 
-    Inputs:
-      filename: name of the file to be read
-
-    Returns:
-      (list of strings, 2D array)
-    '''
-    with open(filename) as f:
-        labels = f.readline().strip().split(',')
-        data = np.loadtxt(f, delimiter=',', dtype=np.float64)
-        return labels, data
 
 
 
