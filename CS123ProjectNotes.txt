@@ -1,0 +1,223 @@
+﻿CS123 Reddit Data Analysis
+
+
+Current To Do List:
+Max:
+        Linear Regression and Data Analysis Tools
+Spencer:
+        Top 10 counts
+        Top mentioned tech companies
+Jonathan:
+        NLTK for comments
+General:
+        List of tech companies and the amount they beat EPS by for each quarter in 2016
+
+
+Interesting Questions:
+1. How well do the top 10 mentioned tech companies predict the rest of the tech companies?
+2. How well do tech companies predict other industries
+
+
+Repository:
+1. Everyone is added to the repo, use git clone to get a copy of the repo
+   1. git clone [link found on github]
+   2. DO NOT check in any data set, download into your copy of the repo
+
+
+Goals:
+1. Gather a list of various stocks and how they have performed every quarter in the year of 2016
+2. Gather sentiment analysis towards keywords for the stock and word counts for the words
+3. Use those sentiments to train a machine learning model and see if we can predict how companies will do each quarter
+4. For fun:
+   1. Who were the meanest people in 2016 on reddit
+   2. Which reddit users had the most positive influence on other users in 2016
+
+
+TO DO:
+1. Finish getting all of the training stock data
+2. Unzip all of the 2016 data
+3. Finish mapreduce function for getting sentiment towards words
+
+
+Packages: (add any packages that you have incorporated into your code)
+mrjob
+nltk 
+numpy 
+rtorrent
+Bzip2
+
+
+For nltk:
+1. sudo pip3 install -U nltk
+2. sudo python3 -m nltk.downloader -d /usr/local/share/nltk_data all
+
+
+Other:
+brew install aria2
+        run by: aria2c [link]
+
+
+Technical Challenges/Problems:
+1. The dataset is over 1TB uncompressed and will present major challenges when testing and running algorithms. We will have to figure out a way to break up this data set into smaller chunks for testing. Creating an efficient data structure for goal #2 will also pose a challenge
+2. (This takes a long time, just download a smaller dataset onto your own computer and work on it with those, we can run final scripts on my vm) Download of data is from a magnet link, may need to install torrent client first to install from magnet link
+   1. UPDATE: New link where we can torrent the data year by year, this will make our jobs significantly easier. https://www.reddit.com/r/datasets/comments/65o7py/updated_reddit_comment_dataset_as_torrents/
+   2. Download Instructions:
+      1. sudo apt-get install rtorrent
+      2. rtorrent, enter, paste link, go up to loaded link and ctrl-s, ctrl-q to exit
+      3. files are compressed as bz2, extract by bzip2 -dk file.bz2
+      4. delete zip by bzip2 -d file.bz2
+   1. When downloaded it is broken up by months as well, we will need to write some script to automatically unzip all of these files. This is useful because we will also need a script to go through all of these files when analyzing all of them
+1. We need to use Google Cloud Dataproc to run analysis over the data set, how do we connect this with the drive with all of the data?
+2. Uncompressing the files is taking a ridiculous amount of time
+   1. It looks like 2011 has a lot of corrupt files, may need to re download 2011 torrent and try again
+1. How do we get a vm instance from someone else’s account to access the reddit disk on my account?
+2. Google is charging $0.04 per GB of storage, we no longer have the ability to work over the entire data set as storage costs alone would drain all of our credits
+3. We should try to spin up multiple vm instances and break up the work to those multiple instances, then we need to combine the results from those instances
+4. How do I go through the data set just one time and get data on daily, weekly, and monthly averages and counts. Make mapreduce more efficient
+5. How to use mapreduce to do a linear regression <- only this can make our mapreduce more difficult
+6. I need to go through the entire data set one time and be able to extract:
+   1. Sentiment towards a word
+   2. Word count of the word
+   3. Do the multiple linear regression for the data we get
+1. FUCK, multiple linear regression fucking impossible to do, need to use outside package to do our machine learning for us OR we could write our own but do it outside of a big data environment
+
+
+Progress:
+1. Compressed files are currently stored on a persistent disk, need to write a shell script to uncompress all of these files and then need to figure out a way to use dataproc on vm
+2. Currently uncompressing files, after completion need to re download files that were corrupt
+
+
+Setting up VM Instance (Max Liu):
+1. Create new instance with all the default settings
+2. Click on the instance and edit, go down to Disks and add the reddit data disk
+3. ssh into the instance
+   1. ssh -i ~/.ssh/google-cloud-cs123 USERNAME@ExTERNAL-IP
+   2. Yes you want to connect
+1. Run the following:
+   1. sudo mkdir /mnt/storage
+   2. sudo mount /dev/sdb /mnt/storage
+   3. cd /mnt/storage
+1. To exit properly:
+   1. sudo shutdown -h now
+   2. Go to web console and delete the vm instance
+1. To send files over to the vm instance
+   1. scp -i ~/.ssh/google-cloud-cs123 FILENAME USERNAME@EXTERNAL-IP:~/
+   2. scp -i ~/.ssh/google-cloud-cs123 -r DIRNAME USERNAME@EXTERNAL-IP:~/
+
+
+Timeline:
+
+
+By end of week 8:
+1. Data is clean and uncompressed on disk
+2. algorithms for sentiment analysis are done
+3. mapreduce functions for the data are done
+4. figured out a way to divide data between machines
+By end of week 9:
+1. Mapreduce functions have been run through data
+2. Machine learning model has been figured out
+3. Start beginning to run our data through the machine learning model
+4. Started getting the test data for machine learning predictions
+By week 10 day before presentation:
+1. All data has been collected
+2. Results from machine learning are back
+3. We have timeseries for a couple key word searches that we can visualize
+4. We are able to make some future predictions based on our model
+
+
+
+
+
+
+
+
+________________
+
+
+Steps For Installing Data onto Disk and Running Scripts over Data on Google Compute
+
+If you did the lab you can skip the first 16 steps, just create a new VM instance
+1. Go to console.cloud.google.com
+2. Go to Compute Engine -> VM Instances
+3. Select “My First Project” is prompted, then “Continue”
+4. Select “Create” button
+5. Accept default settings 
+6. Click “Create”
+7. Click “SSH” button, remember username and then type exit and hit return
+8. Open a terminal window and type:
+        ssh-keygen -t rsa -f ~/.ssh/google-cloud-cs123 -C [USERNAME]
+        
+        Press return twice if prompted for passphrase
+9. Type and enter:
+        chmod 400 ~/.ssh/google-cloud-cs123
+10. Go to Metadata category on left column of dashboard
+11. Choose “SSH Keys” tab
+12. Click “Edit”
+13. Select field that says “Enter Entire Key Data”
+14. Go to terminal to type and enter:
+        cat ~/.ssh/google-cloud-cs123.pub
+15. Copy everything
+16. Paste into “Enter Entire Key Data” and save
+
+The entire process above of entering SSH keys only needs to be done once
+
+17. Go to Dashboard for Compute Engine and go to Disks
+18. Click “Create Disk”
+19. From Source Type choose “None (Blank Disk)”
+20. Choose size of 1000GB
+21. Use “Automatic Encryption”
+22. Click “Create”
+23. Go back and click on your VM Instance
+24. Click “Edit” at the top
+25. Go to “Additional Disks” and click “Add Item”
+26. Select the disk you just made
+27. Allow both “Read/Write” access and “Keep Disk” when deleting instance
+28. Click Save
+29. SSH into the vm in your terminal by entering:
+        ssh -i ~/.ssh/google-cloud-cs123 USERNAME@ExTERNAL-IP
+30. If asked about authenticity, choose yes
+31. Type in the following commands:
+        sudo /sbin/mkfs.ext4 /dev/sdb
+        sudo mkdir /mnt/storage
+        sudo mount /dev/sdb /mnt/storage
+        sudo chmod 777 /mnt/storage
+        cd /mnt/storage <-all data should be stored in this folder
+
+The process for making disk also only needs to be done once but you need to connect it to the VM every time you make a new VM
+
+32. Install the necessary packages in order to download data set:
+        sudo apt-get install rtorrent
+33. Type rtorrent and the hit enter
+34. Hit enter again and paste the link to the download
+   1. https://www.reddit.com/r/datasets/comments/65o7py/updated_reddit_comment_dataset_as_torrents/
+   2. Copy the link to just the 2016 download from the link above
+   1. Use arrow keys to go up to the loaded download and hit ctrl-s
+   2. Wait for download to finish and ctrl-q to exit rtorrent
+   3. Run bzip2 -d file.bz2 to unzip the zipped files
+
+
+TO DOWNLOAD THE FIRST 3 MONTHS OF ZIPPED FILES, RUN THE FOLLOWING COMMAND IN STORAGE FOLDER ON DISK:
+curl -O http://files.pushshift.io/reddit/comments/RC_2016-01.bz2 -O http://files.pushshift.io/reddit/comments/RC_2016-02.bz2 -O http://files.pushshift.io/reddit/comments/RC_2016-03.bz2
+
+
+While downloading, letting your computer go to sleep might cause problems
+
+
+When exiting the VM:
+   1. sudo shutdown -h now
+   2. Go back to vm instances and wait for vm to become grey, then delete the vm instance
+
+
+To Reconnect to new VM:
+   1. Go to VM instance and edit, add the disk again
+   2. SSH into VM
+   3. Run:
+        sudo mkdir /mnt/storage
+        sudo mount /dev/sdb /mnt/storage
+        cd /mnt/storage
+
+
+To send files over to the VM from your terminal:
+scp -i ~/.ssh/google-cloud-cs123 FILENAME USERNAME@EXTERNAL-IP:~/
+or
+scp -i ~/.ssh/google-cloud-cs123 -r DIRNAME USERNAME@EXTERNAL-IP:~/
