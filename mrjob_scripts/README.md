@@ -1,3 +1,5 @@
+# File Descriptions
+
 FINAL_COMP.TXT - sample list of top companies and their associated words
 
 companylist.csv - a list of the largest 1000 companies
