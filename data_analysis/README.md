@@ -1,6 +1,6 @@
 # File Descriptions
 
-3dplot.py - 
+3dplot.py - functions to plot our data
 
 FINAL_COMP.txt - final list of top companies with top words mentioned with those companies
 
@@ -16,6 +16,6 @@ TAILORED_COMP_DATA.txt - the sentiment scores for the bucketed words for each co
 
 dataframe.py - script that reads in all of the data and creates the dataframe
 
-multi_linear_regression.py - 
+multi_linear_regression.py - functions to perform regression analysis
 
-plot.pdf - 
+plot.pdf - resulting plot
